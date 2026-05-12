@@ -198,6 +198,33 @@
             line-height: 1.9;
         }
 
+        .important-info {
+            background-color: rgba(212, 175, 55, 0.1);
+            border-left: 4px solid var(--accent-light);
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+
+        .important-info .info-title {
+            color: var(--accent-light);
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .important-info .info-title::before {
+            content: "📅";
+            margin-right: 8px;
+        }
+
+        .important-info p {
+            color: var(--text-color);
+            margin-bottom: 10px;
+            padding-left: 28px;
+        }
+
         footer {
             text-align: center;
             margin-top: 50px;
@@ -337,6 +364,21 @@
             <div class="subsection">
                 <div class="subsection-title">3.1 Требования при подаче заявки</div>
                 <p class="text-content">При подаче заявки на участие необходимо указать свой класс и фамилию.</p>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">3.2 Сроки записи</div>
+                <p class="text-content">Записи принимаются до <strong>18.05.2026</strong>.</p>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">3.3 Время проведения турнира</div>
+                <p class="text-content">Время проведения турнира — с <strong>19.05.2026</strong> по <strong>22.05.2026</strong>.</p>
+            </div>
+
+            <div class="important-info">
+                <div class="info-title">Важная информация</div>
+                <p>Не забудьте зарегистрироваться до 18 мая! Турнир начинается 19 мая.</p>
             </div>
         </div>
 
