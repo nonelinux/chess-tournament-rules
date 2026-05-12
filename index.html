@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Правила Шахматного Турнира</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0c1018;
+            --card: #131924;
+            --card-hover: #161e2e;
+            --gold: #d4af37;
+            --gold-light: #e8c84a;
+            --gold-dim: rgba(212, 175, 55, 0.12);
+            --text: #c8cdd8;
+            --text-bright: #eef0f4;
+            --border: rgba(212, 175, 55, 0.18);
+            --shadow: 0 8px 32px rgba(0,0,0,0.5);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.75;
+            min-height: 100vh;
+        }
+
+        /* ── BACKGROUND PATTERN ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 60px,
+                    rgba(212,175,55,0.03) 60px,
+                    rgba(212,175,55,0.03) 61px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 60px,
+                    rgba(212,175,55,0.03) 60px,
+                    rgba(212,175,55,0.03) 61px
+                );
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: clamp(16px, 5vw, 48px) clamp(12px, 4vw, 32px) 60px;
+        }
+
+        /* ── HEADER ── */
+        header {
+            text-align: center;
+            padding: clamp(32px, 8vw, 72px) 0 clamp(24px, 5vw, 48px);
+            animation: fadeDown .7s ease both;
+        }
+
+        .crown-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: clamp(8px, 2vw, 18px);
+            margin-bottom: 16px;
+        }
+
+        .crown-line {
+            flex: 1;
+            max-width: 120px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold));
+        }
+        .crown-line.right {
+            background: linear-gradient(90deg, var(--gold), transparent);
+        }
+
+        .crown-icon {
+            font-size: clamp(28px, 6vw, 44px);
+            line-height: 1;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: clamp(26px, 7vw, 52px);
+            font-weight: 900;
+            color: var(--gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 18px rgba(212,175,55,0.25);
+            line-height: 1.15;
+        }
+
+        .subtitle {
+            margin-top: 10px;
+            font-size: clamp(13px, 2.5vw, 16px);
+            color: var(--gold-light);
+            font-weight: 300;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            opacity: .8;
+        }
+
+        /* ── REGISTRATION BANNER ── */
+        .registration-banner {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+            border-radius: 14px;
+            padding: clamp(20px, 5vw, 32px) clamp(16px, 4vw, 28px);
+            margin-bottom: clamp(24px, 5vw, 40px);
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(212,175,55,0.22), 0 2px 8px rgba(0,0,0,0.3);
+            animation: fadeDown .9s ease both;
+        }
+
+        .banner-label {
+            color: #0c1018;
+            font-size: clamp(13px, 2.5vw, 15px);
+            font-weight: 600;
+            margin-bottom: 14px;
+            letter-spacing: .5px;
+        }
+
+        .registration-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #0c1018;
+            color: var(--gold);
+            padding: clamp(10px, 2.5vw, 13px) clamp(20px, 4vw, 32px);
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: clamp(13px, 2.5vw, 16px);
+            border: 2px solid var(--gold);
+            transition: background .25s, color .25s, transform .2s, box-shadow .25s;
+            margin-bottom: 20px;
+            white-space: nowrap;
+        }
+
+        .registration-btn:hover, .registration-btn:focus {
+            background: var(--gold);
+            color: #0c1018;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(212,175,55,0.3);
+            outline: none;
+        }
+
+        .arrow { transition: transform .25s; }
+        .registration-btn:hover .arrow { transform: translateX(4px); }
+
+        .deadlines {
+            background: rgba(12, 16, 24, 0.18);
+            border-radius: 10px;
+            padding: clamp(12px, 3vw, 18px) clamp(14px, 3vw, 20px);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .deadline-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #0c1018;
+            font-size: clamp(14px, 2.5vw, 17px);
+            font-weight: 700;
+        }
+
+        /* ── SECTION CARDS ── */
+        .section {
+            background: var(--card);
+            border-radius: 12px;
+            border-left: 4px solid var(--gold);
+            padding: clamp(20px, 5vw, 36px);
+            margin-bottom: clamp(16px, 3vw, 24px);
+            box-shadow: var(--shadow);
+            transition: background .25s, transform .25s, box-shadow .25s;
+            animation: fadeUp .6s ease both;
+        }
+
+        .section:hover {
+            background: var(--card-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(212,175,55,0.12), 0 4px 16px rgba(0,0,0,0.4);
+        }
+
+        h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--gold);
+            font-size: clamp(18px, 4vw, 26px);
+            margin-bottom: 22px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* ── SUBSECTIONS ── */
+        .subsection {
+            margin-bottom: 20px;
+        }
+        .subsection:last-child { margin-bottom: 0; }
+
+        .subsection-title {
+            color: var(--text-bright);
+            font-size: clamp(13px, 2.2vw, 15px);
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .subsection-title::before {
+            content: "▸";
+            color: var(--gold);
+            font-size: 15px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .text-content {
+            color: var(--text);
+            font-size: clamp(13px, 2.2vw, 15px);
+            line-height: 1.8;
+            padding-left: 16px;
+        }
+
+        /* ── LISTS ── */
+        ul {
+            list-style: none;
+            padding-left: 16px;
+            margin-top: 6px;
+        }
+
+        li {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 8px;
+            font-size: clamp(13px, 2.2vw, 15px);
+            color: var(--text);
+            line-height: 1.75;
+        }
+
+        li::before {
+            content: "♟";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--gold);
+            font-size: 13px;
+        }
+
+        /* ── IMPORTANT BOX ── */
+        .important-info {
+            background: var(--gold-dim);
+            border-left: 3px solid var(--gold-light);
+            border-radius: 8px;
+            padding: clamp(12px, 3vw, 18px) clamp(14px, 3vw, 20px);
+            margin-top: 18px;
+        }
+
+        .info-title {
+            color: var(--gold-light);
+            font-weight: 700;
+            font-size: clamp(13px, 2.2vw, 15px);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .important-info p {
+            color: var(--text);
+            font-size: clamp(13px, 2.2vw, 15px);
+            padding-left: 26px;
+        }
+
+        strong { color: var(--gold-light); }
+
+        /* ── FOOTER ── */
+        footer {
+            text-align: center;
+            padding-top: 32px;
+            border-top: 1px solid var(--border);
+            color: var(--gold);
+            font-size: 15px;
+            letter-spacing: 2px;
+            animation: fadeUp .8s ease both;
+        }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── RESPONSIVE TWEAKS ── */
+
+        /* Tablet */
+        @media (max-width: 768px) {
+            .section:hover { transform: none; }
+            .deadlines { gap: 8px; }
+        }
+
+        /* Mobile L */
+        @media (max-width: 480px) {
+            .registration-btn { width: 100%; justify-content: center; }
+            .deadline-row { font-size: 13px; flex-wrap: wrap; text-align: center; }
+            h2 { font-size: 18px; }
+            .crown-line { max-width: 60px; }
+        }
+
+        /* Very small */
+        @media (max-width: 360px) {
+            body { font-size: 13px; }
+            .container { padding: 10px 10px 48px; }
+            h1 { font-size: 22px; }
+        }
+
+        /* Wide screens */
+        @media (min-width: 1200px) {
+            .container { max-width: 940px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <header>
+        <div class="crown-row">
+            <div class="crown-line"></div>
+            <div class="crown-icon">♚</div>
+            <div class="crown-line right"></div>
+        </div>
+        <h1>Правила Турнира</h1>
+        <p class="subtitle">Школьный Шахматный Турнир</p>
+    </header>
+
+    <div class="registration-banner">
+        <p class="banner-label">📝 Правила для шахматистов, записавшихся на турнир</p>
+        <a href="https://forms.yandex.ru/cloud/6a031efcd046885e12862278/" class="registration-btn" target="_blank" rel="noopener">
+            Перейти к регистрации <span class="arrow">→</span>
+        </a>
+        <div class="deadlines">
+            <div class="deadline-row">
+                <span>⏱️</span>
+                <span>Записи принимаются до <strong style="color:#0c1018">18.05.2026</strong></span>
+            </div>
+            <div class="deadline-row">
+                <span>🗓️</span>
+                <span>Турнир проходит с <strong style="color:#0c1018">19.05.26</strong> по <strong style="color:#0c1018">22.05.26</strong></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 1 -->
+    <div class="section">
+        <h2>1. Общие требования поведения</h2>
+
+        <div class="subsection">
+            <div class="subsection-title">1.1 Решения судей</div>
+            <p class="text-content">Решения судей являются окончательными и обязательными для выполнения.</p>
+        </div>
+
+        <div class="subsection">
+            <div class="subsection-title">1.2 Требования организаторов</div>
+            <p class="text-content">Участники обязаны выполнять требования организаторов, связанные непосредственно с шахматным турниром.</p>
+        </div>
+
+        <div class="subsection">
+            <div class="subsection-title">1.3 Поведение во время партии</div>
+            <p class="text-content">Во время партии участникам запрещается разговаривать, подсказывать или отвлекать друг друга.</p>
+        </div>
+
+        <div class="subsection">
+            <div class="subsection-title">1.4 Запрещённое поведение на турнире</div>
+            <p class="text-content">Присутствуя на шахматном турнире, запрещается:</p>
+            <ul>
+                <li>Материться.</li>
+                <li>Громко разговаривать.</li>
+                <li>Мешать другим партиям.</li>
+                <li>Мешать организаторам.</li>
+                <li>Проявлять агрессию по отношению к участникам и организаторам.</li>
+                <li>Проявлять неспортивное поведение.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="section">
+        <h2>2. Правила игры</h2>
+
+        <div class="subsection">
+            <div class="subsection-title">2.1 Участники партии</div>
+            <p class="text-content">В одной шахматной партии участвуют только 2 участника.</p>
+        </div>
+
+        <div class="subsection">
+            <div class="subsection-title">2.2 Время игр</div>
+            <ul>
+                <li>Все игры четвертьфинала, полуфинала и финала проводятся с ограничением в 15 минут для обоих участников.</li>
+                <li>Все остальные игры проводятся с ограничением в 10 минут для обоих участников.</li>
+            </ul>
+        </div>
+
+        <div class="subsection">
+            <div class="subsection-title">2.3 Правило касания фигуры</div>
+            <p class="text-content">Если игрок коснулся своей фигуры во время своего хода, он обязан сделать ход этой фигурой (если это возможно).</p>
+        </div>
+
+        <div class="subsection">
+            <div class="subsection-title">2.4 Невозможные ходы</div>
+            <p class="text-content">Если участник совершает 3 невозможных хода, то ему приписывается поражение.</p>
+        </div>
+
+        <div class="subsection">
+            <div class="subsection-title">2.5 Истечение времени</div>
+            <p class="text-content">Если у участника заканчивается время, ему засчитывается поражение.</p>
+        </div>
+
+        <div class="subsection">
+            <div class="subsection-title">2.6 Ничья</div>
+            <p class="text-content">Партия может завершиться вничью по соглашению игроков или при невозможности поставить мат.</p>
+        </div>
+
+        <div class="subsection">
+            <div class="subsection-title">2.7 Электронные устройства</div>
+            <p class="text-content">Во время партии запрещается пользоваться телефоном или другими электронными устройствами.</p>
+        </div>
+
+        <div class="subsection">
+            <div class="subsection-title">2.8 Победа</div>
+            <p class="text-content">Победа присуждается игроку, поставившему мат королю соперника.</p>
+        </div>
+
+        <div class="subsection">
+            <div class="subsection-title">2.9 Спорные ситуации</div>
+            <p class="text-content">В спорных ситуациях окончательное решение принимает судья.</p>
+        </div>
+    </div>
+
+    <!-- SECTION 3 -->
+    <div class="section">
+        <h2>3. Запись участников</h2>
+
+        <div class="subsection">
+            <div class="subsection-title">3.1 Требования при подаче заявки</div>
+            <p class="text-content">При подаче заявки на участие необходимо указать свой класс и фамилию.</p>
+        </div>
+
+        <div class="subsection">
+            <div class="subsection-title">3.2 Сроки записи</div>
+            <p class="text-content">Записи принимаются до <strong>18.05.2026</strong>.</p>
+        </div>
+
+        <div class="subsection">
+            <div class="subsection-title">3.3 Время проведения турнира</div>
+            <p class="text-content">Время проведения турнира — с <strong>19.05.2026</strong> по <strong>22.05.2026</strong>.</p>
+        </div>
+
+        <div class="important-info">
+            <div class="info-title">📅 Важная информация</div>
+            <p>Не забудьте зарегистрироваться до 18 мая! Турнир начинается 19 мая.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>♟ Удачи в турнире! ♟</p>
+    </footer>
+
+</div>
+</body>
+</html>
